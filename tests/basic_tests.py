@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jun 30 20:41:37 2025
+from omniweb_downloader import OMNIWebDownloader
 
-@author: jamesedmond
-"""
-
+def test_creation():
+    d = OMNIWebDownloader(variables=["sym_h"])
+    assert isinstance(d, OMNIWebDownloader)
