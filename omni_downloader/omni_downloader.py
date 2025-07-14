@@ -284,7 +284,7 @@ class OMNIDownloader:
                 self, 
                 start_time: str, 
                 end_time: str, 
-                filename: str
+                filepath: str
     ) -> str:
         """
         Downloads data from OMNIWeb between start and end in YYYYMMDDHH format.
@@ -313,8 +313,8 @@ class OMNIDownloader:
             start_time for download as str (e.g. 2012010100 [YYYYMMDDHH])
         end_time: str
             end_time for download as str
-        filename: str
-            The name of the file to save the downloaded data to.
+        filepath: str
+            The path of the file to save the downloaded data to (folder + filename).
         
         RETURNS
         -------
@@ -332,7 +332,6 @@ class OMNIDownloader:
             raise RuntimeError(f"Request failed with status {response.status_code}\n{response.text[:500]}")
 
         # Otherwise, save downlaoded file contents to file at filepath
-        filepath = os.path.join(self.save_dir, filename)
         with open(filepath, "w") as f:
             f.write(response.text)
         print(f"Saved to {filepath}")
@@ -565,14 +564,21 @@ class OMNIDownloader:
             var_string = "_".join(self.variables)
             yyyymm = t0.strftime("%Y%m")
             filename = f"omni_{var_string}_{yyyymm}.txt"
-
+            filepath = os.path.join(self.save_dir, filename)
             print(f"Fetching {start_str} to {end_str}...")
 
-            filepath = self._download(
-                                start_time = start_str, 
-                                end_time   = end_str, 
-                                filename   = filename
-            )
+            # check if file exists, and if it does not, then download ...
+            if not os.path.exists(filepath):
+                filepath = self._download(
+                                    start_time = start_str, 
+                                    end_time   = end_str, 
+                                    filename   = filename
+                )
+
+            # ... otherwise, use local file
+            else:
+                print("Preexisting download file found - retrieving local file")
+            
             df = self._parse(filepath)
             all_dfs.append(df)
 
