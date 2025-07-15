@@ -188,6 +188,22 @@ class OMNIDownloader:
     
     
     
+    def get_allowed_low_res_vars(self):
+        """
+        Return list of strs of vars that can be downloaded at low res
+        """
+        return self.VAR_ID_MAP_LOW_RES.keys()
+    
+    
+    
+    def get_allowed_high_res_vars(self):
+        """
+        Return list of strs of vars that can be downloaded at high res
+        """
+        return self.VAR_ID_MAP_HIGH_RES.keys()
+    
+    
+    
     def _get_var_id_dict(
                 self
     ) -> dict[str, int]:
@@ -598,35 +614,75 @@ if __name__ == "__main__":
 
     
 
-    ## Example of downloading SYM/H and AE at 1min
+    
+    # 11111 Example of downloading at 1min resolution 11111
+    
+    ## Example of downloading BZ_GSM, density, and flow_speed at 1min
     # instantiate OMNIWebDownloader object
-    omni = OMNIDownloader(
-                variables = ["sym_h", "ae"],
-                time_res = '1min'
+    omni_1min = OMNIDownloader(
+                    variables = ["bz_gsm", "density", "flow_speed"],
+                    time_res = '1min'
     )
     # fetch data for particular range (downloaded in 1 month chunks)
-    df = omni.fetch_range("2012-01-01", "2013-01-01")
-    # convert to xarray and save
+    df_1min = omni_1min.fetch_range("2012-01-01", "2012-03-01")
+    # convert to xarray and save (if you like xarray)
     #df.to_xarray().to_netcdf( os.path.join(os.getcwd(),'omni_symh_ae_1min.nc') )
     
+    # 11111111111111111111111111111111111111111111111111111
     
+    
+    
+    
+    # 22222 Example of downloading at 5min resolution 22222
     
     ## Example of downloading SYM/H and AE at 5min
-    omni = OMNIDownloader(
-                variables = ["sym_h", "ae"],
-                time_res = '5min'
-    )
-    df = omni.fetch_range("2012-01-01", "2013-01-01")
-    #df.to_xarray().to_netcdf( os.path.join(os.getcwd(),'omni_symh_ae_5min.nc') )
+    #omni = OMNIDownloader(
+    #            variables = ["sym_h", "density", "flow_speed"],
+    #            time_res = '5min'
+    #)
+    #df = omni.fetch_range("2012-01-01", "2013-01-01")
+    
+    # 22222222222222222222222222222222222222222222222222222
     
     
+    
+    
+    # 33333 Example of downloading at 1hour resolution 33333
     
     ## Example of downloading Kp and AE at 1hour
-    omni = OMNIDownloader(
-                variables = ["kp", "ae"],
-                time_res = 'hour'
+    omni_hour = OMNIDownloader(
+                    variables = ["kp", "ae"],
+                    time_res = 'hour'
     )
-    df = omni.fetch_range("2012-01-01", "2013-01-01")
-    #df.to_xarray().to_netcdf( os.path.join(os.getcwd(),'omni_kp_ae_1hour.nc') )
+    df_hour = omni_hour.fetch_range("2012-01-01", "2012-03-01")
+    
+    # 33333333333333333333333333333333333333333333333333333
+    
+    
+    
+    
+    # 44444 How to merge pandas dataframes at different time resolutions 44444
+    
+    ## if you wanted to merge the dataframes of the 1min data and 1 hour
+    ## data (just repeating hourly values at 1min resolution), then you
+    ## can use this
+    # Reindex to 1-min index, forward fill
+    df_hour_to_1min_aligned = df_hour.reindex(df_1min.index, method='ffill')
+    # Then join to the 1-min dataframe
+    df_merged = df_1min.join(df_hour_to_1min_aligned)
+    
+    # 444444444444444444444444444444444444444444444444444444444444444444444444
 
+
+
+
+    # 55555 Vars that can be downloaded can be inferred from class 55555
+    # 55555 dicts or by calling couple of functions                55555
+    
+    # find out high res vars
+    omni_1min.get_allowed_high_res_vars()
+    # find out low res vars
+    omni_1min.get_allowed_low_res_vars()
+    
+    # 555555555555555555555555555555555555555555555555555555555555555555
         
