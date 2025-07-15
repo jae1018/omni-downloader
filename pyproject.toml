@@ -15,6 +15,5 @@ authors = [
 dependencies = [
     "requests",
     "pandas",
-    "numpy",
-    "xarray"
+    "numpy"
 ]

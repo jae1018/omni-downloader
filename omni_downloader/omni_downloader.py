@@ -572,7 +572,7 @@ class OMNIDownloader:
                 filepath = self._download(
                                     start_time = start_str, 
                                     end_time   = end_str, 
-                                    filename   = filename
+                                    filepath   = filepath
                 )
 
             # ... otherwise, use local file
