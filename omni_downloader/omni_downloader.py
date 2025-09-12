@@ -3,12 +3,40 @@
 
 
 
+"""
+FUTURE DEV NOTES / TO DO:
+
+111 PRIMARY 111
+  1) Kind of annoying that only some indices can be downloaded according to
+     certain times (e.g. Kp at 3hr res, but for whatever reason user needs
+     it as 1min res) - make it so that any product can be downloaded at 1-min,
+     5-min, or 1-hr resolutions
+  2) Make a GUI!
+    
+111111111111111
+
+
+
+222 SECONDARY 222
+
+22222222222222222
+
+
+
+333 DEBUG 333
+
+3333333333333
+
+
+
+"""
+
+
 import os
 import requests
 import pandas as pd
 import numpy as np
 from io import StringIO
-
 
 
 
