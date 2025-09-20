@@ -12,6 +12,11 @@ FUTURE DEV NOTES / TO DO:
      it as 1min res) - make it so that any product can be downloaded at 1-min,
      5-min, or 1-hr resolutions
   2) Make a GUI!
+  3) Make sure no duplicate variables given in 'variables' (causes downstream
+     errors).
+  4) Make switch to xarray to have safer and better file I/O than pandas
+  5) Improve the nan_tracker - currently not catching the nans for alpha_ratio
+     (which appear like 9.999)
     
 111111111111111
 
@@ -216,19 +221,19 @@ class OMNIDownloader:
     
     
     
-    def get_allowed_low_res_vars(self):
+    def get_allowed_low_res_vars():
         """
         Return list of strs of vars that can be downloaded at low res
         """
-        return self.VAR_ID_MAP_LOW_RES.keys()
+        return OMNIDownloader.VAR_ID_MAP_LOW_RES.keys()
     
     
     
-    def get_allowed_high_res_vars(self):
+    def get_allowed_high_res_vars():
         """
         Return list of strs of vars that can be downloaded at high res
         """
-        return self.VAR_ID_MAP_HIGH_RES.keys()
+        return OMNIDownloader.VAR_ID_MAP_HIGH_RES.keys()
     
     
     
